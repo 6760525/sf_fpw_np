@@ -1,0 +1,49 @@
+<!--  наследуемся от шаблона default.html, который мы создавали ещё во времена flatpages -->
+{% extends 'flatpages/default.html' %} 
+
+{% load custom_filters %}
+ 
+<!-- Название у нас будет proudcts -->
+{% block title %}
+Posts
+{% endblock title %}
+ 
+<!-- В контенте на странице мы выводим все товары -->
+{% block content %}
+<h1>Все новости (всего: {{news|length}})</h1>
+<h3>{{ time_now|date:'M d Y' }}</h3> <!-- Здесь мы применяем фильтр date. Он очень похож на метод strftime у даты. С его помощью мы можем выводить дату в нужном нам формате -->
+{% if news %}
+<hr>
+    <table>
+        <tr>
+            <td>
+                Заголовок
+            </td>
+            <td>
+                Дата публикации
+            </td>
+            <td>
+                Текст статьи
+            </td>
+            <td>
+        </tr>
+    {% for post in news %}
+            <tr>
+                <td>
+                    <p align="left">{{ post.title|Censor }}</p>
+                </td>
+                <td>
+                    {{ post.creation_time|date:'d.m.Y' }}
+                </td>
+                <td>
+                    <p align="left">{{ post.text|truncatewords:50|Censor }}</p>
+                </td>
+            </tr>
+        {% endfor %}
+        </table>
+    </table>
+{% else %}
+    <h2>Новостей нет!</h2>
+{% endif %}
+{% endblock content %}
+

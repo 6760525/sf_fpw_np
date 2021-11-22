@@ -1,0 +1,22 @@
+{% extends 'flatpages/default.html' %} 
+
+{% load custom_filters %}
+ 
+{% block title %}
+Post
+{% endblock title %}
+ 
+{% block content %}
+
+    <p align="left">
+        <b>Заголовок:</b> {{ post.title|Censor }}<br>
+        <b>Дата публикации:</b> {{ post.creation_time|date:'d.m.Y' }}<br>
+        <b>Текст статьи:</b> {{ post.text|Censor }}<br>
+        <b>Автор:</b> {{ post.author.user }}<br>
+        <b>Тип:</b> {{ post.type }}<br>
+        <b>Рейтинг:</b> {{ post.rating }}<br>
+        <!-- 
+        <b>Категория:</b> {{ post.category }}<br>
+        -->
+    </p>
+{% endblock content %}
