@@ -1,0 +1,63 @@
+{% extends 'flatpages/default.html' %} 
+
+{% load custom_filters %}
+
+{% load my_tags %}
+ 
+{% block title %}
+Posts
+{% endblock title %}
+ 
+{% block content %}
+<h1>Все новости (всего: {{filter.qs|length}})</h1>
+<h3>{{ time_now|date:'M d Y' }}</h3>
+{% if filter.qs %}
+<hr>
+    <form method="GET">
+        {{ filterset.form.as_p }}
+        <input type="submit" value="Найти">
+    </form>
+    <table>
+        <thead>
+            <th><b>Заголовок</b></th>
+            <th><b>Дата публикации</b></th>
+            <th><b>Текст статьи</b></th>
+        </thead>
+    {% for post in object_list %} 
+        <tr>
+            <td>
+                <hr>
+                <a href="{% url 'post' post.id %}">{{ post.title|Censor }}</a><br>
+                <a href="{% url 'update' post.id %}"><u>Редактировать</u></a>
+                <a href="{% url 'delete' post.id %}"><u> Удалить </u></a>
+            </td>
+            <td>{{ post.creation_time|date:'d.m.Y' }}</td>
+            <td><p align="left">{{ post.text|truncatewords:50|Censor }}</p></td>
+        </tr>
+    {% endfor %}
+    </table>
+    <a href="{% url 'create' %}">Добавить статью/новость</a> <br>
+    {% if is_paginated %}
+        {% if page_obj.has_previous %}
+            <a href="?{% param_replace page=1 %}">First</a>
+            <a href="?{% param_replace page=page_obj.previous_page_number %}"><</a>
+        {% endif %}
+    
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+                <a>{{ num }}</a>
+            {% elif num > page_obj.number|add:'-2' and num < page_obj.number|add:'2' %}
+                <a href="?{% param_replace page=num %}">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+    
+        {% if page_obj.has_next %}
+            <a href="?{% param_replace page=page_obj.next_page_number %}">></a>
+            <a href="?{% param_replace page=page_obj.paginator.num_pages %}">Last</a>
+        {% endif %}
+    {% endif %}
+{% else %}
+    <h2>Новостей нет!</h2>
+{% endif %}
+{% endblock content %}
+

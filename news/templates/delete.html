@@ -1,0 +1,27 @@
+{% extends 'flatpages/default.html' %} 
+
+{% load custom_filters %}
+ 
+{% block title %}
+Posts
+{% endblock title %}
+
+{% block content %}
+<h2>Вы действительно хотите удалить эту статью?</h2>
+<table>
+    <thead>
+        <th><b>Заголовок</b></th>
+        <th><b>Дата публикации</b></th>
+        <th><b>Текст статьи</b></th>
+    </thead>
+    <tr>
+        <td><p align="left">{{ post.title|Censor }}</p></td>
+        <td>{{ post.creation_time|date:'d.m.Y' }}</td>
+        <td><p align="left">{{ post.text|truncatewords:50|Censor }}</p></td>
+    </tr>
+</table>
+
+<form method="POST">
+    {% csrf_token %}
+    <input type="submit" value="подтвердить"></form>
+{% endblock content %}
