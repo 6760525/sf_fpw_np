@@ -28,10 +28,10 @@ class Author(models.Model):
 
 class Category(models.Model):
     category = models.CharField(max_length=128, unique=True)
+    subscribers = models.ManyToManyField(User)
 
     def __str__(self):
         return f'{self.category}'
-
 
 class Post(models.Model):
     article = 'AR'
@@ -130,3 +130,4 @@ class SocialSignupForm(SignupForm):
         basic_group.user_set.add(user)
         user.save()
         return user
+    

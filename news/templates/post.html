@@ -14,6 +14,7 @@ Post
         <b>Текст статьи:</b> {{ post.text|Censor }}<br>
         <b>Автор:</b> {{ post.author.user }}<br>
         <b>Тип:</b> {{ post.type }}<br>
+        <b>Категоря(и):</b> {{ post.categories }}<br>
         <b>Рейтинг:</b> {{ post.rating }}<br>
         <!-- 
         <b>Категория:</b> {{ post.category }}<br>
@@ -21,4 +22,3 @@ Post
     </p>
     <a href="{% url 'news' %}">Список статей</a>
 {% endblock content %}
-

@@ -1,0 +1,28 @@
+{% extends 'flatpages/default.html' %}
+
+{% load custom_filters %}
+
+{% block title %}
+Weekly news
+{% endblock title %}
+
+{% block content %}
+    <h1>Новости за неделю:</h1>
+    {% if weekly %}
+        <table>
+        <thead>
+            <th><b> Название статьи </b></th>
+            <th><b> Время создания </b></th>
+            <th><b> Текст новости/cnfnmb </b></th>
+        </thead>
+            {% for w in weekly %}
+            <tr>
+                <td><a href="{% url 'post' post.id %}">{{ post.title }}</a></td>
+                <td>{{ post.creation_time|date:'d.m.Y H:i:s' }}</td>
+                <td>{{ post.text|truncatewords:50|Censor }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+
+{% endblock content %}
