@@ -17,9 +17,9 @@ from django.views.generic.edit import CreateView
 from django.contrib.auth.decorators import login_required
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
-from datetime import time
 from django.views.generic import TemplateView
-     
+from django.core.cache import cache
+ 
 class PostsList(ListView):
     model = Post
     template_name = 'news.html'
@@ -28,15 +28,16 @@ class PostsList(ListView):
     paginate_by = 10
     form_class = PostForm
     
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, *args,**kwargs):
         context = super().get_context_data(**kwargs)
-        context['time_now'] = datetime.utcnow()  # добавим переменную текущей даты time_now
+        context['time_now'] = datetime.now()
         context['categories'] = Category.objects.all()
         context['form'] = PostForm()
         context['is_authenticated'] = self.request.user.is_authenticated
         context['is_not_author'] = not self.request.user.groups.filter(name = 'authors').exists()
+        
         return context
-    
+
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST) 
         if form.is_valid(): 
@@ -74,7 +75,7 @@ class PostsSearch(FilteredListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['time_now'] = datetime.utcnow()
+        context['time_now'] = datetime.now()
         context['filter'] = PostFilter(self.request.GET, queryset=self.get_queryset())
         context['is_authenticated'] = self.request.user.is_authenticated
         context['is_not_author'] = not self.request.user.groups.filter(name = 'authors').exists()
@@ -98,10 +99,9 @@ class PostCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     success_url = '/news/'
     
     def post(self, request, *args, **kwargs):
-        id = request.id
         user = User.objects.get(id=request.user.id)
         author = Author.objects.get(user=user)
-        d_from = datetime.now(tz=time.timezone).date()
+        d_from = datetime.now().date()
         d_to = d_from+timedelta(days=1)
         posts = Post.objects.filter(author=author, creation_time__range=(d_from, d_to))
         if len(posts) > 3:
@@ -131,7 +131,7 @@ class PostCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
                     
                     html_content = render_to_string(
                         'notification_created.html', {
-                            'id': id,
+                            'id': post.id,
                             'user': subscriber,
                             'title': client_title,
                             'text': client_text[:50],

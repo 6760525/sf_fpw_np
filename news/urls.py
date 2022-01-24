@@ -4,6 +4,7 @@ from .views import PostCreateView, PostDeleteView, PostUpdateView, PostsList, Po
 from .views import upgrade_me
 from .views import SubscribeView
 from .views import PostLimitView
+from django.views.decorators.cache import cache_page
 
 urlpatterns = [
     path('', PostsList.as_view(), name='news'),

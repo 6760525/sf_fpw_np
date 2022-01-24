@@ -3,14 +3,16 @@
 {% load custom_filters %}
  
 {% block title %}
-Posts
+Create Post
 {% endblock title %}
  
 {% block content %}
-<h3>Информация о статье</h3>
-<form method="POST">
-    {% csrf_token %} 
-    {{ form }}
-    <input type="submit" value="Добавить статью">
-</form>
+
+<h3>Новая статья</h3>
+    <form method="POST">
+        {% csrf_token %} 
+        {{ form }}
+        <input type="submit" value="Добавить статью">
+    </form>
+
 {% endblock content %}

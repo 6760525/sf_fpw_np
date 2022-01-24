@@ -1,12 +1,12 @@
 from celery import shared_task
 from .models import Post, Category
 from django.template.loader import render_to_string
-from datetime import datetime, timedelta, time
+from datetime import datetime, timedelta
 from django.core.mail import EmailMultiAlternatives
 
 @shared_task
 def weekly_mail():
-    week = datetime.now(tz=time.timezone) - timedelta(days=7)
+    week = datetime.now() - timedelta(days=7)
     cats = Category.objects.all()
 
     for cat in cats:
@@ -20,7 +20,7 @@ def weekly_mail():
         html_content = render_to_string('notification_weekly.html', {'weekly': weekly})
 
         msg = EmailMultiAlternatives(
-            subject=f'Новости за неделю. Раздел: {cat} - {datetime.now().strftime("%Y-%M-%d")}',
+            subject=f'Новости за неделю. Раздел: {cat} - {datetime.now().strftime("%Y-%m-%d")}',
             body='',
             from_email='aturin@yandex.ru',
             to=emails,

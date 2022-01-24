@@ -34,6 +34,7 @@ class Category(models.Model):
         return f'{self.category}'
 
 class Post(models.Model):
+    
     article = 'AR'
     news = 'NE'
 
@@ -69,6 +70,8 @@ class Post(models.Model):
     def get_absolute_url(self):
         return f'/news/{self.id}' 
 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
 
 class PostCategory(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)

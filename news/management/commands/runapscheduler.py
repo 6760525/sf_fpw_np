@@ -9,7 +9,7 @@ from django_apscheduler.jobstores import DjangoJobStore
 from django_apscheduler.models import DjangoJobExecution
  
 logger = logging.getLogger(__name__)
- 
+
 # наша задача по выводу текста на экран
 def my_job():
     #  Your job processing logic here... 
